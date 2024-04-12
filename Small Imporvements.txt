@@ -1,0 +1,55 @@
+Step 3: Small Imporvements:
+
+In this case, the player ship and all types of enemies are able to fire bullets using the below approaches as:
+
+
+We've added logic to check if the player ship and each enemy ship are ready to fire bullets.
+If the player ship is ready to fire a bullet (playerShipFiresBullet()), we create a new player ship bullet using the createPlayerShipBullet() method of the GameService.
+For each enemy ship, if it's ready to fire (enemyShip->isReadyToFire()), we create a new enemy ship bullet using the createEnemyShipBullet() method of the GameService. We also pass the type of the enemy ship to determine the type of bullet to create.
+We need to implement the playerShipFiresBullet() and EnemyShip::isReadyToFire() functions to determine when the player ship and enemy ships should fire bullets, respectively.
+
+Additionally, we need to implement the createPlayerShipBullet() and createEnemyShipBullet() methods in the GameService class to create new bullets for the player ship and enemy ships.
+
+Once We have implemented these functions and methods, the player ship and enemy ships should be able to fire bullets in the game.
+
+
+Code:
+
+
+To enable the player ship and enemy ships to fire bullets, we need to modify the main game loop in the main() function. We'll add code to handle bullet firing for the player ship and each type of enemy.
+
+Here's how we can update the code:
+
+
+
+#include "../../header/Main/GameService.h"
+
+int main()
+{
+    using namespace Main;
+
+    GameService* game_service = new GameService();
+    game_service->ignite();
+
+    while (game_service->isRunning())
+    {
+        game_service->update();
+
+        // Handle player ship bullet firing
+        if (playerShipFiresBullet()) {
+            game_service->createPlayerShipBullet();
+        }
+
+        // Handle enemy bullet firing
+        for (EnemyShip* enemyShip : game_service->getEnemyShips()) {
+            if (enemyShip->isReadyToFire()) {
+                game_service->createEnemyShipBullet(enemyShip->getType());
+            }
+        }
+
+        game_service->render();
+    }
+
+    return 0;
+}
+ 

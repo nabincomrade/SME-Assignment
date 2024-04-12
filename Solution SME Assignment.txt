@@ -1,0 +1,96 @@
+Here is the approaches that I have detected in the source code and to resolve these issue, I have written the solution to bug and fix it down as:
+
+Error:
+
+C2238: Unexpected error line no 20
+
+In your case, the line virtual: int vvv; is incorrect because there is no function declaration. So to fix this error, we should either remove the virtual keyword if it's not intended to declare a virtual function, or specify a function after the virtual keyword if it's intended to be a virtual function.
+
+For example, if vvv is supposed to be a virtual function:
+
+
+class v {
+    virtual int vvv() { return 0; }  // Declareing a virtual function
+};
+
+
+Or if virtual is not intended, we can remove it:
+
+class v {
+    int vvv;  // No virtual function
+};
+
+
+
+//Next Error
+# Compiler Warning C4430
+In this case, the error is likely caused by a missing type specifier in the declaration of m_myClass in PlayerController.h around line 20. To resolve this error, we need to specify the correct type for m_myClass.
+
+Here's an example of how to fix it:
+
+
+struct CMyClass {
+   CUndeclared m_myClass;  // C4430 - Error: missing type specifier
+   int m_myClass;         //This line is correctly declared with type int
+};
+
+//Next Error
+# Compiler Error C2143
+To resolve this error, we need to explicitly tell the compiler that PutFuncType is a template. we can do this by using the template keyword before PutFuncType, like so:
+
+
+class MyClass
+{
+    template<class Ty, typename PropTy>
+    struct PutFuncType : public Ty::template PutFuncType<Ty, PropTy>
+    {
+    };
+};
+By adding the template keyword, we are indicating to the compiler that PutFuncType is a template and should be treated as such. This should resolve the C2143 error in this context.
+
+
+//Next Error
+# Compiler Warning C4244
+
+In this step, the warning is generated because a double value (x) is being passed to a function f() that expects an integer argument. This can result in the fractional part of the double value being truncated, leading to a loss of data.
+
+To resolve the C4244 warning in this case, we should either change the function f() to accept a double parameter if it's intended to work with floating-point values, or  we should ensure that the value passed to f() is converted to an integer type without loss of precision if it must operate on integers.
+
+Here is how you can modify the code to resolve the warning:
+
+
+
+
+int f(double x){ return 0; } // Change the parameter type of f() to double
+int main() {
+   double x = 10.1;
+   int i = 10;
+   return (f(x)); // No C4244 warning
+}
+By changing the parameter type of f() to double, we ensure that the function can accept floating-point values without causing a loss of data. Alternatively, we can explicitly cast x to an integer if you intend to work with integer values within f().
+
+
+//Next Error
+# Warning C26495
+
+The line generates warning C26495 because the member variable value isn't initialized when a MyStruct object is created.
+
+
+struct MyStruct
+{
+    int value;
+    MyStruct() {} // C26495, MyStruct::value is uninitialized
+};
+
+So to resolve the issue, we can add in-class initialization to all of the member variables.
+
+
+struct MyStruct
+{
+    int value{};  // empty brace initializer sets value to 0
+    MyStruct() {} // no warning, MyStruct::value is set via default member initialization
+};
+
+
+//Next Error
+# 
